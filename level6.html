@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 6: JavaScript URL Injection</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00FF00;
+            font-family: monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        a {
+            color: #00FF00;
+            text-decoration: none;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        a:hover {
+            color: #007700;
+        }
+        img {
+            margin-top: 20px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Level 6: JavaScript URL Injection</h1>
+    <p>Enter a URL (or a JavaScript payload):</p>
+    <input id="urlInput" placeholder="Enter a URL...">
+    <button onclick="createLink()">Create Link</button>
+    <div id="output">
+        <p>No link created yet!</p>
+    </div>
+    <img src="ali.jpg" alt="Hacker Skull">
+
+    <script>
+        const output = document.getElementById('output');
+
+        function createLink() {
+            const userInput = document.getElementById('urlInput').value;
+
+            // إنشاء عنصر <a> مع خاصية href المدخلة من المستخدم
+            const linkTag = `<a href="${userInput}" target="_blank">Click Here</a>`;
+
+            // عرض الرابط في DOM (غير آمن)
+            output.innerHTML = linkTag;
+
+            // إذا كانت الحمولة تحتوي على JavaScript
+            if (userInput.startsWith('javascript:')) {
+                alert("You are the XSS Master!");
+                // تحديث حالة المستوى
+                const completedLevels = JSON.parse(localStorage.getItem('completedLevels')) || {};
+                completedLevels[6] = true;
+                localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
+            }
+        }
+    </script>
+</body>
+</html>

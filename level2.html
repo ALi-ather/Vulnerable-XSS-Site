@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 2: DOM-Based XSS</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00FF00;
+            font-family: monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        img {
+            margin-top: 20px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Level 2: DOM-Based XSS</h1>
+    <p>Modify the URL's hash to inject code!</p>
+    <div id="output"></div>
+    <img src="ali.jpg"alt="Hacker Skull">
+
+    <script>
+        // قراءة الجزء بعد #hash من الرابط
+        const hash = window.location.hash.substring(1); // Get the hash value
+        const outputElement = document.getElementById('output');
+
+        // عرض القيمة في الصفحة باستخدام innerHTML (ثغرة)
+        outputElement.innerHTML = `Hash value: ${hash}`;
+
+        // إذا كانت الحمولة تحتوي على كود XSS
+        if (hash.includes('<script>')) {
+            alert("You are the XSS Master!");
+            // تحديث حالة المستوى
+            const completedLevels = JSON.parse(localStorage.getItem('completedLevels')) || {};
+            completedLevels[2] = true;
+            localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
+        }
+    </script>
+</body>
+</html>

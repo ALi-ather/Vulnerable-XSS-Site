@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 3: Stored XSS</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00FF00;
+            font-family: monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        img {
+            margin-top: 20px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Level 3: Stored XSS</h1>
+    <p>Enter something to be stored and displayed:</p>
+    <input id="userInput" placeholder="Enter something...">
+    <button onclick="storeInput()">Submit</button>
+    <div id="storedOutput"></div>
+    <img src="ali.jpg"alt="Hacker Skull">
+
+    <script>
+        const storedOutput = document.getElementById('storedOutput');
+
+        // عرض القيمة المخزنة عند تحميل الصفحة
+        storedOutput.innerHTML = localStorage.getItem('storedXSS') || "Nothing stored yet!";
+
+        // وظيفة لتخزين المدخل وعرضه
+        function storeInput() {
+            const userInput = document.getElementById('userInput').value;
+
+            // تخزين الإدخال في localStorage (بدون فلترة)
+            localStorage.setItem('storedXSS', userInput);
+
+            // عرض القيمة المخزنة (غير آمن)
+            storedOutput.innerHTML = userInput;
+
+            // إذا كانت الحمولة تحتوي على كود XSS
+            if (userInput.includes('<script>')) {
+                alert("You are the XSS Master!");
+                // تحديث حالة المستوى
+                const completedLevels = JSON.parse(localStorage.getItem('completedLevels')) || {};
+                completedLevels[3] = true;
+                localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
+            }
+        }
+    </script>
+</body>
+</html>

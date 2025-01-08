@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 1: Reflected XSS</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00FF00;
+            font-family: monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        input {
+            background-color: black;
+            color: #00FF00;
+            border: 1px solid #00FF00;
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #00FF00;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #007700;
+        }
+        img {
+            margin-top: 20px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Level 1: Reflected XSS</h1>
+    <p>Enter your name:</p>
+    <input id="nameInput" placeholder="Enter your name">
+    <button onclick="submitName()">Submit</button>
+
+    <div id="output"></div>
+    <img src="ali.jpg" alt="Hacker Skull">
+
+    <script>
+        function submitName() {
+            const name = document.getElementById('nameInput').value;
+
+            // عرض الإدخال في DOM (معرض للثغرة)
+            document.getElementById('output').innerHTML = `Hello, ${name}`;
+
+            // تحقق إذا كانت الحمولة حمولة XSS
+            if (name.includes('<script>')) {
+                alert("You are the XSS Master!");
+                // تحديث المستوى كـ مكتمل
+                const completedLevels = JSON.parse(localStorage.getItem('completedLevels')) || {};
+                completedLevels[1] = true;
+                localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
+            } else {
+                alert("Try Again!");
+            }
+        }
+    </script>
+</body>
+</html>

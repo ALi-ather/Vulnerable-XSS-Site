@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 5: Unsafe Attributes</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00FF00;
+            font-family: monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        img {
+            margin-top: 20px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Level 5: Unsafe Attributes</h1>
+    <p>Enter an image URL or test with an XSS payload:</p>
+    <input id="imageInput" placeholder="Enter image URL...">
+    <button onclick="loadImage()">Load Image</button>
+    <div id="output">
+        <p>No image loaded yet!</p>
+    </div>
+    <img src="ali.jpg" alt="Hacker Skull">
+
+    <script>
+        const output = document.getElementById('output');
+
+        function loadImage() {
+            const userInput = document.getElementById('imageInput').value;
+
+            // إنشاء عنصر <img> مع خاصية src المدخلة من المستخدم
+            const imgTag = `<img src="${userInput}" alt="User Image" onerror="alert('XSS Attack!')">`;
+
+            // عرض الصورة في DOM (غير آمن)
+            output.innerHTML = imgTag;
+
+            // إذا كانت الحمولة تحتوي على كود XSS (مثل onerror)
+            if (userInput.includes('onerror')) {
+                alert("You are the XSS Master!");
+                // تحديث حالة المستوى
+                const completedLevels = JSON.parse(localStorage.getItem('completedLevels')) || {};
+                completedLevels[5] = true;
+                localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 4: Event Handler XSS</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00FF00;
+            font-family: monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        img {
+            margin-top: 20px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Level 4: Event Handler XSS</h1>
+    <p>Enter an attribute value:</p>
+    <input id="userInput" placeholder="Enter attribute value...">
+    <button onclick="addButton()">Create Button</button>
+    <div id="output"></div>
+    <img src="ali.jpg"alt="Hacker Skull">
+
+    <script>
+        const output = document.getElementById('output');
+
+        function addButton() {
+            const userInput = document.getElementById('userInput').value;
+
+            // إنشاء زر مع الخاصية المدخلة من المستخدم
+            const newButton = `<button ${userInput}>Click Me</button>`;
+
+            // عرض الزر في DOM (غير آمن)
+            output.innerHTML = newButton;
+
+            // إذا كانت الحمولة تحتوي على كود XSS
+            if (userInput.includes('onclick')) {
+                alert("You are the XSS Master!");
+                // تحديث حالة المستوى
+                const completedLevels = JSON.parse(localStorage.getItem('completedLevels')) || {};
+                completedLevels[4] = true;
+                localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
+            }
+        }
+    </script>
+</body>
+</html>
